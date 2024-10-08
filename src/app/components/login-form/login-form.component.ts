@@ -3,8 +3,9 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { NgIf } from '@angular/common';
 
 export interface LoginFormContent {
-  pseudo: string
+  email: string
   password:string
+  stayConnected: boolean
 }
 
 @Component({
@@ -26,22 +27,24 @@ export class LoginFormComponent implements OnInit {
   ngOnInit(): void {
     
     this.form = new FormGroup({
-      pseudo: new FormControl('john@mail.com', [
+      email: new FormControl('admin@mail.com', [
           Validators.required,
           Validators.minLength(3),
           Validators.email
         ]),
-      password: new FormControl('changeme', [
+      password: new FormControl('admin', [
         Validators.required,
         Validators.minLength(4)]),
+      stayConnected: new FormControl(false)
     })
 
   }
   // on verifie que le formulaire est valide, si c'est le cas on emit du a l'Output
   async onSubmitForm(): Promise <void>{
     if(this.form.valid){
-      const {pseudo, password } = this.form.value
-      this.formSubmitted.emit({pseudo,password})
+      const {email, password, stayConnected } = this.form.value
+      console.log(stayConnected)
+      this.formSubmitted.emit({email,password, stayConnected})
       
     }
 

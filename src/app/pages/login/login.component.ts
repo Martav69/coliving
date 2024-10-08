@@ -21,8 +21,8 @@ export class LoginComponent {
 
 
     try {
-      // on renvoie le login et le pseudo dans le authservice
-      await this.authService.login(creds.pseudo, creds.password)
+      // on renvoie le login et le email dans le authservice
+      await this.authService.login(creds.email, creds.password, creds.stayConnected)
       this.router.navigateByUrl('/')
 
     }

@@ -1,4 +1,8 @@
 export const environment = {
-    apiAdress : 'localhost',
-    apiPort : 8000
+    apiAdress : 'http://localhost',
+    apiPort : 8000,
+    localStorageKeys : {
+        token: "TOKEN"
+    }
+
 };

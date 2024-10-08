@@ -17,7 +17,7 @@ export abstract class BaseService {
     }
 
     protected get apiUrl(): string {
-        return `${this.address}:${this.port}/${this.resource}/`
+        return `${this.address}:${this.port}/${this.resource}`
     }
 
 }
