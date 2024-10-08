@@ -1,18 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { lastValueFrom } from 'rxjs';
+import { BehaviorSubject, lastValueFrom, map, Observable } from 'rxjs';
 import { BaseService } from '../base.service';
 import { environment } from '../../../environments/environment.development';
 import { jwtDecode } from 'jwt-decode';
+import { UsersService } from '../users/users.service';
+import { UserJWT, UserJWTHttp } from '../../entities/User.entity';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService extends BaseService {
 
+  private readonly usersService = inject(UsersService)
   private readonly http = inject(HttpClient)
-
-  private _token:string | undefined
+  // transformation token en observable / convention avec dollar à la fin
+  private token$:BehaviorSubject<string | undefined> = new BehaviorSubject(undefined)
 
   constructor (){
 
@@ -21,19 +24,29 @@ export class AuthService extends BaseService {
     const token = localStorage.getItem(environment.localStorageKeys.token)
 
     if (token) {
-      this._token = token  
+      this.token$.next(token) 
     }
 
   }
 
   get token ():string | undefined {
-    return this._token
+    return this.token$.getValue()
+  }
+
+  // on le déclare en observable pour qu'il soit en readonly 
+  selectToken(): Observable<string |undefined>{
+    return this.token$.asObservable() // readonly
+  }
+
+  // ici on se plug sur token, lorsqu'une valeur transite on la récupère et transorme en boolean
+  selectIsAuthenticated(): Observable<boolean>{
+    return this.token$.pipe(map(token => !!token))
   }
 
 
 
   get isAuthenticated ():boolean {
-    return !!this._token // on transforme le contenue du token en booleen
+    return !!this.token // on transforme le contenue du token en booleen
   }
 
   
@@ -51,14 +64,17 @@ export class AuthService extends BaseService {
   }
 
   logout():void {
-    this._token = undefined
+    this.token$.next(undefined)
+    localStorage.removeItem(environment.localStorageKeys.token)
+    this.usersService.userJWT = undefined
+    
   }
 
   private processToken(token:string, stayConnected:boolean):void {
-    const tokenExtracted = jwtDecode(token)
-    console.log(tokenExtracted)
+    const tokenExtracted: UserJWTHttp = jwtDecode(token)
+    this.usersService.userJWT = UserJWT.fromHttp(tokenExtracted)
 
-    this._token = token
+    this.token$.next(token)
 
     // si il choisis de rester connecter
     if (stayConnected) {
