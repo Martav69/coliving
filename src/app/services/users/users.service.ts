@@ -1,13 +1,21 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { UserJWT } from '../../entities/User.entity';
+import { User, UserJWT } from '../../entities/User.entity';
+import { HttpClient } from '@angular/common/http';
+import { BaseService } from '../base.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UsersService {
+export class UsersService extends BaseService{
 
+  private readonly http = inject(HttpClient)
   private userJWT$:BehaviorSubject<UserJWT|undefined> = new BehaviorSubject(undefined)
+
+  constructor (){
+    super('/api/users')
+  }
+  
 
   selectUserJWT(): Observable<UserJWT|undefined>{
 
@@ -17,6 +25,11 @@ export class UsersService {
 
   set userJWT(value: UserJWT | undefined) {
     this.userJWT$.next(value)
+  }
+
+  async list(): User[]{
+    const req = this.http.get(this.apiUrl)
+
   }
 
 }
