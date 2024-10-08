@@ -66,7 +66,7 @@ export interface User {
     country: string
     postalcode:string
 
-    // spaces?: Space[]
+    // spaces?: SpaceHttp[]
     // image?: string[]
 
 }

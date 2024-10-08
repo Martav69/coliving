@@ -24,7 +24,7 @@ export class AuthService extends BaseService {
     const token = localStorage.getItem(environment.localStorageKeys.token)
 
     if (token) {
-      this.token$.next(token) 
+      this.processToken(token, false)
     }
 
   }

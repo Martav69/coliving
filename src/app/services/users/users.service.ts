@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { User, UserJWT } from '../../entities/User.entity';
+import { BehaviorSubject, lastValueFrom, Observable } from 'rxjs';
+import { User, UserHttp, UserJWT } from '../../entities/User.entity';
 import { HttpClient } from '@angular/common/http';
 import { BaseService } from '../base.service';
 
@@ -13,7 +13,7 @@ export class UsersService extends BaseService{
   private userJWT$:BehaviorSubject<UserJWT|undefined> = new BehaviorSubject(undefined)
 
   constructor (){
-    super('/api/users')
+    super('api/users')
   }
   
 
@@ -23,12 +23,21 @@ export class UsersService extends BaseService{
 
   }
 
+  get userJWT():UserJWT|undefined{
+    
+    return this.userJWT$.getValue()
+
+  }
+
   set userJWT(value: UserJWT | undefined) {
     this.userJWT$.next(value)
   }
 
-  async list(): User[]{
-    const req = this.http.get(this.apiUrl)
+  async list(): Promise<User[]>{
+    const req = this.http.get<{member: UserHttp[]}>(this.apiUrl)
+    const res = await lastValueFrom(req)
+
+    return res.member.map(userHttp => User.fromHttp(userHttp) )
 
   }
 

@@ -10,7 +10,7 @@ import { InstantChatComponent } from './pages/instant-chat/instant-chat.componen
 export const routes: Routes = [
     { path: '', component: HomeComponent, },
     { path: 'connexion', component: LoginComponent, canActivate: [noAuthGuard]},
-    { path: 'liste-utilisateurs', canActivate:[authGuard], component: UsersListComponent},
+    { path: 'list-utilisateurs', canActivate:[authGuard], component: UsersListComponent},
     { path: 'conversation', canActivate:[authGuard], component: InstantChatComponent},
     { path: 'page-introuvable', component: NotFoundComponent},
     { path: '**', redirectTo: 'page-introuvable'}
