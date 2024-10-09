@@ -5,10 +5,13 @@
 
 <div class="">
     <form class="flex" action=""
+    *ngIf="form"
     [formGroup]="form"
-    (ngSubmit)="onClickSendMessage()">
+    (ngSubmit)="onClickSendMessage()"
+    >
 
     <input 
+    class="border-2 p-2"
     formControlName="content"
     type="text" name="" id="" placeholder="Tapez votre message ...">
     

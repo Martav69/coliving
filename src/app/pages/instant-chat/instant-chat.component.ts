@@ -3,8 +3,9 @@ import { environment } from '../../../environments/environment.development';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../../entities/User.entity';
 import { UsersService } from '../../services/users/users.service';
-import { MessagesService } from '../../services/messages/messages.service';
-import { Message, MessageInput } from '../../entities/Message.entity';
+// import { MessagesService } from '../../services/messages/messages.service';
+// ajouter Message juste avant MessageInput en bas 
+import { MessageInput } from '../../entities/Message.entity';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
 
@@ -18,11 +19,11 @@ import { NgFor, NgIf } from '@angular/common';
 export class InstantChatComponent implements OnInit {
   private readonly route = inject(ActivatedRoute)
   private readonly usersService = inject(UsersService)
-  private readonly messagesService = inject(MessagesService)
+  // private readonly messagesService = inject(MessagesService)
 
 
   private socket: WebSocket;
-  messages: Message[]
+  // messages: Message[]
   receiver: User
   form: FormGroup
 
@@ -36,7 +37,7 @@ export class InstantChatComponent implements OnInit {
     this.receiverId = parseInt(this.route.snapshot.queryParamMap.get('r'))
 
     this.receiver = await this.usersService.getById(this.receiverId)
-    this.messages = await this.messagesService.listForSenderAndReceiver(this.senderId, this.receiverId)
+    // this.messages = await this.messagesService.listForSenderAndReceiver(this.senderId, this.receiverId)
 
     this.form = new FormGroup({
       content: new FormControl(undefined, [
@@ -53,7 +54,7 @@ export class InstantChatComponent implements OnInit {
     this.socket = new WebSocket(`ws://${environment.wsAddress}:${environment.wsPort}`);
 
     // Lorsque la connexion est ouverte
-    this.socket.onopen = (event) => {
+    this.socket.onopen = () => {
       console.log('WebSocket is connected.');
       
       // Ici on devrais faire un premier envoie avec le jeton
@@ -88,6 +89,8 @@ export class InstantChatComponent implements OnInit {
         type: 'conversation.message.created',
         data: message
       }))
+
+      this.form.reset()
     }
   }
 }
