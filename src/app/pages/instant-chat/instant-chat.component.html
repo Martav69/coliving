@@ -1,1 +1,18 @@
-<p>instant-chat works!</p>
+<div
+*ngIf="receiver">
+    {{receiver.firstname}} {{receiver.lastname}}
+</div>
+
+<div class="">
+    <form class="flex" action=""
+    [formGroup]="form"
+    (ngSubmit)="onClickSendMessage()">
+
+    <input 
+    formControlName="content"
+    type="text" name="" id="" placeholder="Tapez votre message ...">
+    
+    <button type="submit"
+    [disabled]="form.invalid">Envoyez</button>
+    </form>
+</div>

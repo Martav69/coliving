@@ -41,4 +41,14 @@ export class UsersService extends BaseService{
 
   }
 
+  async getById(id: number): Promise<User>{
+    const req = this.http.get<{member: UserHttp}>(`${this.apiUrl}/${id}`)
+    const res = await lastValueFrom(req)
+
+    console.log(res)
+
+    return User.fromHttp(res.member) 
+
+  }
+
 }
