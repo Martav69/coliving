@@ -3,6 +3,8 @@ export const environment = {
     apiPort : 8000,
     localStorageKeys : {
         token: "TOKEN"
-    }
+    },
+    wsAddress: "localhost",
+    wsPort: 8080
 
 };
