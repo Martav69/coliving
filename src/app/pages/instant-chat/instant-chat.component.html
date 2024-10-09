@@ -3,6 +3,19 @@
     {{receiver.firstname}} {{receiver.lastname}}
 </div>
 
+<ng-container
+*ngFor="let message of messages">
+    <div
+    class="flex"
+    [class.flex-row]="+message.senderId === receiver.id"
+    [class.flex-row-reverse]="+message.senderId !== receiver.id">
+        <div class="flex flex-col">
+            <span>{{message.content}}</span>
+            <span>{{message.sentDate | date: 'dd/MM/yy HH:mm:ss' }}</span>
+        </div>
+    </div>
+</ng-container>
+
 <div class="">
     <form class="flex" action=""
     *ngIf="form"
