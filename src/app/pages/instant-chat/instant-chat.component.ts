@@ -28,14 +28,14 @@ export class InstantChatComponent implements OnInit {
   receiver: User
   form: FormGroup
 
-  private senderId : number
-  private receiverId : number
+  protected senderId : number
+  protected receiverId : number
 
   async ngOnInit(): Promise<void> {
 
     // on récupère les id dans les query param entre parseInt pour transformer la string en number
-    this.senderId = parseInt(this.route.snapshot.queryParamMap.get('s'))
-    this.receiverId = parseInt(this.route.snapshot.queryParamMap.get('r'))
+    this.senderId = parseInt(this.route.snapshot.queryParamMap.get('s'),10)
+    this.receiverId = parseInt(this.route.snapshot.queryParamMap.get('r'),10)
 
     this.receiver = await this.usersService.getById(this.receiverId)
     // this.messages = await this.messagesService.listForSenderAndReceiver(this.senderId, this.receiverId)
@@ -109,7 +109,8 @@ export class InstantChatComponent implements OnInit {
         content: content
       }
 
-      this.socket.send(JSON.stringify({
+      this.socket.send(
+        JSON.stringify({
         type: 'conversation.message.created',
         data: message
       }))

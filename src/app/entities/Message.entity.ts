@@ -1,16 +1,20 @@
 export interface MessageHttp {
   id: number;
-  sender: string; 
-  receiver: string;
+  sender: {
+    id: number,
+  } 
+  receiver: {
+    id:number,
+  } 
   content: string
-  sentDate: string;
+  sentDate: string
 }
 
 
 export interface Message {
   id: number
-  senderId: string
-  receiverId: string
+  senderId: number
+  receiverId: number
   content: string
   sentDate: string
 }
@@ -20,13 +24,14 @@ export namespace Message {
   export function fromHttp(messageHttp: MessageHttp): Message {
     return {
       id: messageHttp.id,
-      senderId: messageHttp.sender,
-      receiverId: messageHttp.receiver,
+      senderId: messageHttp.sender.id,
+      receiverId: messageHttp.receiver.id,
       content: messageHttp.content,
-      sentDate: messageHttp.sentDate
+      sentDate: messageHttp.sentDate,
     };
   }
 }
+
 
 // type l'envoie dans la socket
 export interface MessageInput {
